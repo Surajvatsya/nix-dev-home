@@ -31,7 +31,7 @@
       perSystem = { self', pkgs, ... }:
         let
           # TODO: Change username
-          myUserName = "john";
+          myUserName = "suraj.kumar1";
         in
         {
           legacyPackages.homeConfigurations.${myUserName} =
