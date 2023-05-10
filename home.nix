@@ -4,7 +4,9 @@
 # https://nix-community.github.io/home-manager/index.html#sec-usage-configuration
 { pkgs, ... }: {
   imports = [
-    # Add your other home-manager modules here.
+    # This loads ./home/neovim/default.nix - neovim configured for Haskell dev, and other things.
+    ./home/neovim
+    # Add more of your home-manager modules here.
   ];
 
   # Nix packages to install to $HOME
@@ -13,11 +15,22 @@
   home.packages = with pkgs; [
     nix-output-monitor # https://github.com/maralorn/nix-output-monitor
     nix-info
+    cachix
+    lazygit # Better git UI
+    ripgrep # Better `grep`
+    nil # Nix language server
   ];
 
   # Programs natively supported by home-manager.
   programs = {
-    bash.enable = true;
+    # on macOS, you probably don't need this
+    bash = {
+      enable = true;
+      initExtra = ''
+        # Make Nix and home-manager installed things available in PATH.
+        export PATH=/run/current-system/sw/bin/:$HOME/.nix-profile/bin:/etc/profiles/per-user/$USER/bin:$PATH
+      '';
+    };
 
     # For macOS's default shell.
     zsh = {
@@ -59,5 +72,8 @@
       nix-direnv.enable = true;
     };
     starship.enable = true;
+
+    # Type `z <pat>` to cd to some directory
+    zoxide.enable = true;
   };
 }
